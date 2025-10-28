@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1757958871304xhvyu2ze2",
+    "description": "PCOD",
+    "amount": 20,
+    "category": "consultation",
+    "date": "2025-09-05",
+    "notes": "",
+    "createdAt": "2025-09-15T17:54:31.304Z"
+  },
+  {
+    "id": "1757959013086ovdnokzeu",
+    "description": "Chemotheraphy",
+    "amount": 900,
+    "category": "test",
+    "date": "2025-09-02",
+    "notes": "",
+    "createdAt": "2025-09-15T17:56:53.086Z"
+  },
+  {
+    "id": "1757959063782z2uxhkij1",
+    "description": "Dental check up",
+    "amount": 30,
+    "category": "consultation",
+    "date": "2025-09-13",
+    "notes": "Next visit on 0ct 10",
+    "createdAt": "2025-09-15T17:57:43.782Z"
+  }
+]

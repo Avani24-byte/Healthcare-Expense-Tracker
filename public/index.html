@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Expense Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2196F3, #21CBF3);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e3f2fd;
+        }
+
+        .form-section h2 {
+            color: #1976d2;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-section h2::before {
+            content: "💊";
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
+        }
+
+        .analytics-section {
+            grid-column: 1 / -1;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e3f2fd;
+            margin-top: 20px;
+        }
+
+        .analytics-section h2 {
+            color: #1976d2;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .analytics-section h2::before {
+            content: "📊";
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #90caf9;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #1565c0;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #424242;
+            font-weight: 500;
+        }
+
+        .expenses-list {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        .expense-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .expense-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .expense-item:last-child {
+            border-bottom: none;
+        }
+
+        .expense-details {
+            flex: 1;
+        }
+
+        .expense-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .expense-meta {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .expense-amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #d32f2f;
+            margin-right: 10px;
+        }
+
+        .category-tag {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .category-medication {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .category-consultation {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .category-test {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .category-insurance {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .category-other {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .delete-btn {
+            padding: 8px 12px;
+            font-size: 12px;
+            margin-left: 10px;
+            width: auto;
+        }
+
+        .no-expenses {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .expense-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .expense-amount {
+                margin-right: 0;
+            }
+        }
+
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ffcdd2;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .success-message {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #c8e6c9;
+            margin-bottom: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Healthcare Expense Tracker</h1>
+            <p>Track and manage your medical expenses with ease</p>
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2>Add New Expense</h2>
+                <div id="error-message" class="error-message"></div>
+                <div id="success-message" class="success-message"></div>
+                
+                <form id="expense-form">
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" id="description" name="description" placeholder="Enter expense description" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount ($)</label>
+                        <input type="number" id="amount" name="amount" step="0.01" placeholder="0.00" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select category</option>
+                            <option value="medication">Medication</option>
+                            <option value="consultation">Doctor Consultation</option>
+                            <option value="test">Medical Tests</option>
+                            <option value="insurance">Insurance</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Notes (Optional)</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Additional notes..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">Add Expense</button>
+                </form>
+            </div>
+
+            <div class="form-section">
+                <h2>Quick Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="total-expenses">$0.00</h3>
+                        <p>Total Expenses</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="monthly-expenses">$0.00</h3>
+                        <p>This Month</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="expense-count">0</h3>
+                        <p>Total Records</p>
+                    </div>
+                </div>
+                <button id="clear-all-btn" class="btn btn-danger">Clear All Data</button>
+            </div>
+        </div>
+
+        <div class="analytics-section">
+            <h2>Expense History</h2>
+            <div id="expenses-list" class="expenses-list">
+                <div class="no-expenses">No expenses recorded yet. Add your first expense above!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Frontend JavaScript - handles UI interactions and communicates with backend
+        class HealthcareTracker {
+            constructor() {
+                this.apiUrl = 'http://localhost:3000/api'; // Backend API endpoint
+                this.expenses = [];
+                this.init();
+            }
+
+            init() {
+                this.setDefaultDate();
+                this.bindEvents();
+                this.loadExpenses();
+            }
+
+            setDefaultDate() {
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('date').value = today;
+            }
+
+            bindEvents() {
+                document.getElementById('expense-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addExpense();
+                });
+
+                document.getElementById('clear-all-btn').addEventListener('click', () => {
+                    if (confirm('Are you sure you want to clear all expenses? This action cannot be undone.')) {
+                        this.clearAllExpenses();
+                    }
+                });
+            }
+
+            async loadExpenses() {
+                try {
+                    // For demo purposes, load from localStorage if backend is not available
+                    if (this.isBackendAvailable()) {
+                        const response = await fetch(`${this.apiUrl}/expenses`);
+                        if (response.ok) {
+                            this.expenses = await response.json();
+                        }
+                    } else {
+                        // Fallback to localStorage
+                        const stored = localStorage.getItem('healthcareExpenses');
+                        this.expenses = stored ? JSON.parse(stored) : [];
+                    }
+                    
+                    this.updateDisplay();
+                } catch (error) {
+                    console.error('Error loading expenses:', error);
+                    // Fallback to localStorage
+                    const stored = localStorage.getItem('healthcareExpenses');
+                    this.expenses = stored ? JSON.parse(stored) : [];
+                    this.updateDisplay();
+                }
+            }
+
+            async addExpense() {
+                const form = document.getElementById('expense-form');
+                const formData = new FormData(form);
+                
+                const expense = {
+                    id: Date.now().toString(),
+                    description: formData.get('description'),
+                    amount: parseFloat(formData.get('amount')),
+                    category: formData.get('category'),
+                    date: formData.get('date'),
+                    notes: formData.get('notes'),
+                    createdAt: new Date().toISOString()
+                };
+
+                if (this.validateExpense(expense)) {
+                    try {
+                        if (this.isBackendAvailable()) {
+                            const response = await fetch(`${this.apiUrl}/expenses`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(expense)
+                            });
+
+                            if (response.ok) {
+                                const newExpense = await response.json();
+                                this.expenses.push(newExpense);
+                            }
+                        } else {
+                            // Fallback to localStorage
+                            this.expenses.push(expense);
+                            localStorage.setItem('healthcareExpenses', JSON.stringify(this.expenses));
+                        }
+
+                        this.showMessage('Expense added successfully!', 'success');
+                        form.reset();
+                        this.setDefaultDate();
+                        this.updateDisplay();
+                    } catch (error) {
+                        console.error('Error adding expense:', error);
+                        this.showMessage('Error adding expense. Please try again.', 'error');
+                    }
+                }
+            }
+
+            async deleteExpense(id) {
+                try {
+                    if (this.isBackendAvailable()) {
+                        const response = await fetch(`${this.apiUrl}/expenses/${id}`, {
+                            method: 'DELETE'
+                        });
+
+                        if (response.ok) {
+                            this.expenses = this.expenses.filter(expense => expense.id !== id);
+                        }
+                    } else {
+                        // Fallback to localStorage
+                        this.expenses = this.expenses.filter(expense => expense.id !== id);
+                        localStorage.setItem('healthcareExpenses', JSON.stringify(this.expenses));
+                    }
+
+                    this.updateDisplay();
+                    this.showMessage('Expense deleted successfully!', 'success');
+                } catch (error) {
+                    console.error('Error deleting expense:', error);
+                    this.showMessage('Error deleting expense. Please try again.', 'error');
+                }
+            }
+
+            async clearAllExpenses() {
+                try {
+                    if (this.isBackendAvailable()) {
+                        const response = await fetch(`${this.apiUrl}/expenses`, {
+                            method: 'DELETE'
+                        });
+
+                        if (response.ok) {
+                            this.expenses = [];
+                        }
+                    } else {
+                        // Fallback to localStorage
+                        this.expenses = [];
+                        localStorage.removeItem('healthcareExpenses');
+                    }
+
+                    this.updateDisplay();
+                    this.showMessage('All expenses cleared!', 'success');
+                } catch (error) {
+                    console.error('Error clearing expenses:', error);
+                    this.showMessage('Error clearing expenses. Please try again.', 'error');
+                }
+            }
+
+            validateExpense(expense) {
+                if (!expense.description.trim()) {
+                    this.showMessage('Please enter a description.', 'error');
+                    return false;
+                }
+
+                if (expense.amount <= 0) {
+                    this.showMessage('Please enter a valid amount.', 'error');
+                    return false;
+                }
+
+                if (!expense.category) {
+                    this.showMessage('Please select a category.', 'error');
+                    return false;
+                }
+
+                if (!expense.date) {
+                    this.showMessage('Please select a date.', 'error');
+                    return false;
+                }
+
+                return true;
+            }
+
+            updateDisplay() {
+                this.updateStats();
+                this.updateExpensesList();
+            }
+
+            updateStats() {
+                const total = this.expenses.reduce((sum, expense) => sum + expense.amount, 0);
+                const currentMonth = new Date().getMonth();
+                const currentYear = new Date().getFullYear();
+                
+                const monthlyTotal = this.expenses
+                    .filter(expense => {
+                        const expenseDate = new Date(expense.date);
+                        return expenseDate.getMonth() === currentMonth && 
+                               expenseDate.getFullYear() === currentYear;
+                    })
+                    .reduce((sum, expense) => sum + expense.amount, 0);
+
+                document.getElementById('total-expenses').textContent = `$${total.toFixed(2)}`;
+                document.getElementById('monthly-expenses').textContent = `$${monthlyTotal.toFixed(2)}`;
+                document.getElementById('expense-count').textContent = this.expenses.length;
+            }
+
+            updateExpensesList() {
+                const container = document.getElementById('expenses-list');
+                
+                if (this.expenses.length === 0) {
+                    container.innerHTML = '<div class="no-expenses">No expenses recorded yet. Add your first expense above!</div>';
+                    return;
+                }
+
+                const sortedExpenses = this.expenses
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                const html = sortedExpenses.map(expense => `
+                    <div class="expense-item">
+                        <div class="expense-details">
+                            <div class="expense-title">${expense.description}</div>
+                            <div class="expense-meta">
+                                ${new Date(expense.date).toLocaleDateString()}
+                                ${expense.notes ? ` • ${expense.notes}` : ''}
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div class="expense-amount">$${expense.amount.toFixed(2)}</div>
+                            <div class="category-tag category-${expense.category}">${expense.category}</div>
+                            <button class="btn btn-danger delete-btn" onclick="tracker.deleteExpense('${expense.id}')">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                container.innerHTML = html;
+            }
+
+            showMessage(message, type) {
+                const errorEl = document.getElementById('error-message');
+                const successEl = document.getElementById('success-message');
+                
+                // Hide both messages first
+                errorEl.style.display = 'none';
+                successEl.style.display = 'none';
+
+                if (type === 'error') {
+                    errorEl.textContent = message;
+                    errorEl.style.display = 'block';
+                    setTimeout(() => errorEl.style.display = 'none', 5000);
+                } else if (type === 'success') {
+                    successEl.textContent = message;
+                    successEl.style.display = 'block';
+                    setTimeout(() => successEl.style.display = 'none', 3000);
+                }
+            }
+
+            isBackendAvailable() {
+                // This would typically check if the backend is running
+                // For this demo, we'll assume it's not available and use localStorage
+                return false;
+            }
+        }
+
+        // Initialize the application
+        const tracker = new HealthcareTracker();
+    </script>
+</body>
+</html>
